@@ -25,15 +25,6 @@ export default function App() {
   const [userprofiles, setUserProfiles] = useState([]);
   const { signOut } = useAuthenticator((context) => [context.user]);
 
-  useEffect(() => {
-    fetchUserProfile();
-  }, []);
-
-  async function fetchUserProfile() {
-    const { data: profiles } = await client.models.UserProfile.list();
-    setUserProfiles(profiles);
-  }
-
   const sentences = [
     "Happy Birthday!",
     "get better.",
@@ -49,6 +40,15 @@ export default function App() {
     "...knock, knock?",
   ];
 
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  async function fetchUserProfile() {
+    const { data: profiles } = await client.models.UserProfile.list();
+    setUserProfiles(profiles);
+  }
+
   return (
     <Flex
       className="App"
@@ -58,10 +58,15 @@ export default function App() {
       width="70%"
       margin="0 auto"
     >
-      <Heading level={1}>My Profile</Heading>
-      <h1>{sentences[Math.floor(Math.random() * sentences.length)]}</h1>
+      <Heading level={1}>
+        {userprofiles.length
+          ? sentences[Math.floor(Math.random() * sentences.length)]
+          : "loading..."}
+      </Heading>
 
       <Divider />
+
+      <img src="/pizza.png" style={{ width: "15rem", padding: "1rem" }} />
 
       <Grid
         margin="3rem 0"
